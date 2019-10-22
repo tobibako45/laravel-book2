@@ -2,21 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 class HelloController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $data = [
-            'msg' => 'サンプル',
-            'msg2' => 'サンプル2',
+            // 'msg' => 'サンプル',
+            // 'msg2' => 'サンプル2',
+            'msg' => $request->hello
         ];
         // return view('hello.index', $data);
         return response()->json($data);
     }
 
-    public function other()
+    public function other(Request $request)
     {
-        return redirect()->route('hello');
+        $data = [
+            'msg' => $request->bye,
+        ];
+
+        // return redirect()->route('hello'); # リダイレクト
+        return response()->json($data);
     }
 
     public function show($id)
@@ -27,9 +35,6 @@ class HelloController extends Controller
 
         return response()->json($data);
     }
-
-
-
 
 
 }

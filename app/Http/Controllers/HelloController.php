@@ -1,11 +1,17 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use http\Env\Response;
 use Illuminate\Http\Request;
 
 class HelloController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         $data = [
@@ -17,6 +23,10 @@ class HelloController extends Controller
         return response()->json($data);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function other(Request $request)
     {
         $data = [
@@ -27,6 +37,10 @@ class HelloController extends Controller
         return response()->json($data);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show($id)
     {
         $data = [

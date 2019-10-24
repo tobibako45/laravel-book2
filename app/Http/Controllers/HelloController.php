@@ -8,14 +8,28 @@ use Illuminate\Http\Request;
 
 class HelloController extends Controller
 {
+
+    function __construct()
+    {
+        # ここで書き換わる
+        // config(['sample.message' => '新しいメッセージ']);
+    }
+
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
-        $sample_msg = config('sample.message');
-        $sample_data = config('sample.data');
+        // 独自config
+        // $sample_msg = config('sample.message');
+        // $sample_data = config('sample.data');
+
+        // .envに独自変数を追加
+        $sample_msg = env('SAMPLE_MESSAGE');
+        $sample_data = env('SAMPLE_DATA');
+
         $data = [
             'msg' => $sample_msg,
             'data' => $sample_data,

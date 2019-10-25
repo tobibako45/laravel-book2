@@ -81,19 +81,22 @@ class HelloController extends Controller
 
 
         // /storage/app/public/hello.txtがあれば先に削除
-        if(Storage::disk('public')->exists('bk_'.$this->fname)){
-            Storage::disk('public')->delete('bk_' . $this->fname);
-        }
+        // if(Storage::disk('public')->exists('bk_'.$this->fname)){
+        //     Storage::disk('public')->delete('bk_' . $this->fname);
+        // }
+        //
+        // // /storage/app/public/hello.txtをコピーして、bk_hello.txtを作る
+        // Storage::disk('public')->copy($this->fname, 'bk_' . $this->fname);
+        //
+        // // /storage/app/内に、bk_hello.txtがあれば削除
+        // if (Storage::disk('local')->exists('bk_'.$this->fname)){
+        //     Storage::disk('local')->delete('bk_' . $this->fname);
+        // }
+        // // /storage/app/から/storage/app/public/に移動
+        // Storage::disk('local')->move('public/bk_' . $this->fname, 'bk_' . $this->fname);
 
-        // /storage/app/public/hello.txtをコピーして、bk_hello.txtを作る
-        Storage::disk('public')->copy($this->fname, 'bk_' . $this->fname);
-
-        // /storage/app/内に、bk_hello.txtがあれば削除
-        if (Storage::disk('local')->exists('bk_'.$this->fname)){
-            Storage::disk('local')->delete('bk_' . $this->fname);
-        }
-        // /storage/app/から/storage/app/public/に移動
-        Storage::disk('local')->move('public/bk_' . $this->fname, 'bk_' . $this->fname);
+        // ダウンロード
+        return Storage::disk('public')->download($this->fname);
 
         return redirect()->route('hello');
     }

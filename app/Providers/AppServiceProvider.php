@@ -32,10 +32,16 @@ class AppServiceProvider extends ServiceProvider
         //     });
 
         // シングルトンで結合
-        app()->singleton('App\MyClasses\MyService', function ($app){
-            $myservice = new MyService();
-            $myservice->setId(0);
-            return $myservice;
-        });
+        // app()->singleton('App\MyClasses\MyService', function ($app){
+        //     $myservice = new MyService();
+        //     $myservice->setId(0);
+        //     return $myservice;
+        // });
+
+
+        // 引数を必要とする結合
+        app()->when('App\MyClasses\MyService')
+            ->needs('$id')
+            ->give(2);
     }
 }

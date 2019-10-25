@@ -20,8 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 # [HelloMiddleware::class]で何故かできない
 Route::middleware([\App\Http\Middleware\HelloMiddleware::class])->group(function () {
-    // Route::get('/hello', 'HelloController@index')->name('hello');
-    Route::get('/hello/{id}', 'HelloController@index');
+    Route::get('/hello', 'HelloController@index')->name('hello');
+    // Route::get('/hello/{id}', 'HelloController@index');
 
     Route::get('/hello/{msg}', 'HelloController@other');
 });

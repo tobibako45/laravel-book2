@@ -11,8 +11,10 @@ class MyService
     private $data = ['Hello', 'Welcome', 'Bye'];
 
 
-    public function __construct()
+    // $id 引数を渡すように変更
+    public function __construct(int $id)
     {
+        $this->setId($id);
         $this->serial = rand();
         echo "「{$this->serial}」";
     }

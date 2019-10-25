@@ -54,16 +54,36 @@ class HelloController extends Controller
         // # ファイルを読み込む
         $sample_data = Storage::disk('public')->get($this->fname);
 
+        // $data = [
+        //     'sample_keys' => $sample_keys,
+        //     'sample_meta' => $sample_meta,
+        //     'modified_time' => $modified_time,
+        //     'sample_data' => explode(PHP_EOL, $sample_data),
+        // ];
+
+        $dir = '/';
+
+        // ディレクトリ内にある全ファイルのパスを得る
+        // $all = Storage::disk('local')->files($dir);
+
+        // ディレクトリ内にある全フォルダのパスを得る
+        // $all = Storage::disk('local')->directories($dir);
+
+        // ディレクトリ内にある全階層のファイルパスを得る
+        // $all = Storage::disk('local')->allfiles($dir);
+
+        // 独自のdisk logs /storage/log/内を読み込み
+        $all = Storage::disk('logs')->allfiles($dir);
+
         $data = [
-            'sample_keys' => $sample_keys,
-            'sample_meta' => $sample_meta,
-            'modified_time' => $modified_time,
-            'sample_data' => explode(PHP_EOL, $sample_data),
+            'msg' => 'DIR: '. $dir,
+            'data' => $all,
         ];
 
-        // return response()->json($data);
+        // return view('hello.index', $data);
 
-        return view('hello.index', $data);
+        return response()->json($data);
+
     }
 
     /**
@@ -100,8 +120,14 @@ class HelloController extends Controller
         // ダウンロード
         // return Storage::disk('public')->download($this->fname);
 
-        # アプロード
-        Storage::disk('local')->putFile('files', $request->file('file'));
+        // putFileでアップロード
+        // Storage::disk('local')->putFile('files', $request->file('file'));
+
+        // putFileAsでアップロード
+        // アップロードしたファイルの拡張子をextension()で取り出して格納。
+        // $ext = '.' . $request->file('file')->extension();
+        // Storage::disk('local')->putFileAs('files', $request->file('file'), 'upload'. $ext);
+
         return redirect()->route('hello');
 
         // return redirect()->route('hello');

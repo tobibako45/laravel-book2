@@ -64,6 +64,21 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        // 独自のやつ
+        'logs' => [
+          'driver' => 'local',
+          'root' => storage_path('logs'),
+          'url' => env('APP_URL').'/storage/logs',
+        ],
+
+        // FTP
+        'ftp' => [
+            'driver' => 'ftp',
+            'host' => 'ホスト名',
+            'username' => '利用者',
+            'password' => 'パスワード'
+        ],
+
     ],
 
 ];

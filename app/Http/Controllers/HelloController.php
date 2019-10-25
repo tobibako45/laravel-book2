@@ -36,22 +36,22 @@ class HelloController extends Controller
         // $sample_msg = env('SAMPLE_MESSAGE');
         // $sample_data = env('SAMPLE_DATA');
 
-        # シンボリックリンク /storage/app/public/から読み込み
+        // シンボリックリンク /storage/app/public/から読み込み
         // $sample_msg = Storage::disk('public')->url($this->fname);
         // $sample_data = Storage::disk('public')->get($this->fname);
 
-        # urlを得る
+        // urlを得る
         $url = Storage::disk('public')->url($this->fname);
-        # ファイルサイズを得る
+        // # ファイルサイズを得る
         $size = Storage::disk('public')->size($this->fname);
-        # 最終更新日を得る
+        // # 最終更新日を得る
         $modified = Storage::disk('public')->lastModified($this->fname);
         $modified_time = date('y-m-d H:i:s', $modified);
 
         $sample_keys = ['url', 'size', 'modified'];
         $sample_meta = [$url, $size, $modified_time];
 
-        # ファイルを読み込む
+        // # ファイルを読み込む
         $sample_data = Storage::disk('public')->get($this->fname);
 
         $data = [
@@ -76,8 +76,18 @@ class HelloController extends Controller
         // return redirect()->route('hello'); # リダイレクト
         // return response()->json($data);
 
-        # シンボリックリンク /storage/app/public/から、先頭に追加
-        Storage::disk('public')->prepend($this->fname, $msg);
+        // シンボリックリンク /storage/app/public/から、先頭に追加
+        // Storage::disk('public')->prepend($this->fname, $msg);
+
+        // /storage/app/public/hello.txtがあれば先に削除
+        Storage::disk('public')->delete('bk_' . $this->fname);
+        // /storage/app/public/hello.txtをコピーして、bk_hello.txtを作る
+        Storage::disk('public')->copy($this->fname, 'bk_' . $this->fname);
+        // /storage/app/内に、bk_hello.txtがあれば削除
+        Storage::disk('local')->delete('bk_' . $this->fname);
+        // /storage/app/から/storage/app/public/に移動
+        Storage::disk('local')->move('public/bk_' . $this->fname, 'bk_' . $this->fname);
+
         return redirect()->route('hello');
     }
 

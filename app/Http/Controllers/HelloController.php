@@ -37,22 +37,30 @@ class HelloController extends Controller
         // $sample_data = env('SAMPLE_DATA');
 
         # シンボリックリンク /storage/app/public/から読み込み
-        $sample_msg = Storage::disk('public')->url($this->fname);
+        // $sample_msg = Storage::disk('public')->url($this->fname);
+        // $sample_data = Storage::disk('public')->get($this->fname);
+
+        # urlを得る
+        $url = Storage::disk('public')->url($this->fname);
+        # ファイルサイズを得る
+        $size = Storage::disk('public')->size($this->fname);
+        # 最終更新日を得る
+        $modified = Storage::disk('public')->lastModified($this->fname);
+        $modified_time = date('y-m-d H:i:s', $modified);
+
+        $sample_keys = ['url', 'size', 'modified'];
+        $sample_meta = [$url, $size, $modified_time];
+
+        # ファイルを読み込む
         $sample_data = Storage::disk('public')->get($this->fname);
 
-
         $data = [
-            'msg' => $sample_msg,
-            'data' => explode(PHP_EOL, $sample_data),
-            // 'data' => $sample_data,
+            'sample_keys' => $sample_keys,
+            'sample_meta' => $sample_meta,
+            'modified_time' => $modified_time,
+            'sample_data' => explode(PHP_EOL, $sample_data),
         ];
 
-        // $data = [
-        //     // 'msg' => 'サンプル',
-        //     // 'msg2' => 'サンプル2',
-        //     'msg' => $request->hello
-        // ];
-        // return view('hello.index', $data);
         return response()->json($data);
     }
 

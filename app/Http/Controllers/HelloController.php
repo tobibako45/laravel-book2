@@ -6,84 +6,26 @@ namespace App\Http\Controllers;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\MyClasses\MyService;
 
 class HelloController extends Controller
 {
-
-    private $fname;
-
-    function __construct()
+    // public function index(MyService $myService)
+    public function index()
     {
-        // ここで書き換わる
-        // config(['sample.message' => '新しいメッセージ']);
 
-        $this->fname = 'hello.txt';
-
-    }
-
-
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function index(Request $request)
-    {
-        // 独自config
-        // $sample_msg = config('sample.message');
-        // $sample_data = config('sample.data');
-
-        // .envに独自変数を追加
-        // $sample_msg = env('SAMPLE_MESSAGE');
-        // $sample_data = env('SAMPLE_DATA');
-
-        // シンボリックリンク /storage/app/public/から読み込み
-        // $sample_msg = Storage::disk('public')->url($this->fname);
-        // $sample_data = Storage::disk('public')->get($this->fname);
-
-        // urlを得る
-        $url = Storage::disk('public')->url($this->fname);
-        // # ファイルサイズを得る
-        $size = Storage::disk('public')->size($this->fname);
-        // # 最終更新日を得る
-        $modified = Storage::disk('public')->lastModified($this->fname);
-        $modified_time = date('y-m-d H:i:s', $modified);
-
-        $sample_keys = ['url', 'size', 'modified'];
-        $sample_meta = [$url, $size, $modified_time];
-
-        // # ファイルを読み込む
-        $sample_data = Storage::disk('public')->get($this->fname);
-
-        // $data = [
-        //     'sample_keys' => $sample_keys,
-        //     'sample_meta' => $sample_meta,
-        //     'modified_time' => $modified_time,
-        //     'sample_data' => explode(PHP_EOL, $sample_data),
-        // ];
-
-        $dir = '/';
-
-        // ディレクトリ内にある全ファイルのパスを得る
-        // $all = Storage::disk('local')->files($dir);
-
-        // ディレクトリ内にある全フォルダのパスを得る
-        // $all = Storage::disk('local')->directories($dir);
-
-        // ディレクトリ内にある全階層のファイルパスを得る
-        // $all = Storage::disk('local')->allfiles($dir);
-
-        // 独自のdisk logs /storage/log/内を読み込み
-        $all = Storage::disk('logs')->allfiles($dir);
+        // サービスコンテナからインスタンスを取得
+        // $myService = app(MyService::class);
+        // $myService = app()->make(MyService::class);
+        $myService = resolve(MyService::class);
 
         $data = [
-            'msg' => 'DIR: '. $dir,
-            'data' => $all,
+            'msg' => $myService->say(),
+            'data' => $myService->data(),
         ];
 
         // return view('hello.index', $data);
-
         return response()->json($data);
-
     }
 
     /**

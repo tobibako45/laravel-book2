@@ -5,14 +5,20 @@ namespace App\Http\Controllers;
 
 use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class HelloController extends Controller
 {
 
+    private $fname;
+
     function __construct()
     {
-        # ここで書き換わる
+        // ここで書き換わる
         // config(['sample.message' => '新しいメッセージ']);
+
+        $this->fname = 'hello.txt';
+
     }
 
 
@@ -27,12 +33,18 @@ class HelloController extends Controller
         // $sample_data = config('sample.data');
 
         // .envに独自変数を追加
-        $sample_msg = env('SAMPLE_MESSAGE');
-        $sample_data = env('SAMPLE_DATA');
+        // $sample_msg = env('SAMPLE_MESSAGE');
+        // $sample_data = env('SAMPLE_DATA');
+
+        # シンボリックリンク /storage/app/public/から読み込み
+        $sample_msg = Storage::disk('public')->url($this->fname);
+        $sample_data = Storage::disk('public')->get($this->fname);
+
 
         $data = [
             'msg' => $sample_msg,
-            'data' => $sample_data,
+            'data' => explode(PHP_EOL, $sample_data),
+            // 'data' => $sample_data,
         ];
 
         // $data = [
@@ -45,17 +57,20 @@ class HelloController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param $msg
+     * @return void
      */
-    public function other(Request $request)
+    public function other($msg)
     {
-        $data = [
-            'msg' => $request->bye,
-        ];
-
+        // $data = [
+        //     'msg' => $request->bye,
+        // ];
         // return redirect()->route('hello'); # リダイレクト
-        return response()->json($data);
+        // return response()->json($data);
+
+        # シンボリックリンク /storage/app/public/から、先頭に追加
+        Storage::disk('public')->prepend($this->fname, $msg);
+        return redirect()->route('hello');
     }
 
     /**

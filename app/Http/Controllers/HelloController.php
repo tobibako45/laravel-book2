@@ -1,32 +1,29 @@
 <?php
-declare(strict_types=1);
+// declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\MyClasses\MyService;
+// use App\MyClasses\MyService;
 
 class HelloController extends Controller
 {
-    // public function index(MyService $myService)
-    public function index()
+    public function index(int $id = -1)
     {
-
-        // サービスコンテナからインスタンスを取得
-        // $myService = app(MyService::class);
-        // $myService = app()->make(MyService::class);
-        $myService = resolve(MyService::class);
-
+        $myservice = app()->makeWith('App\MyClasses\MyService',
+            ['id' => $id]);
         $data = [
-            'msg' => $myService->say(),
-            'data' => $myService->data(),
+            'msg'=> $myservice->say($id),
+            'data'=> $myservice->alldata()
         ];
 
-        // return view('hello.index', $data);
         return response()->json($data);
+
+        // return view('hello.index', $data);
     }
+
 
     /**
      * @param $msg

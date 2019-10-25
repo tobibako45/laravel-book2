@@ -61,14 +61,16 @@ class HelloController extends Controller
             'sample_data' => explode(PHP_EOL, $sample_data),
         ];
 
-        return response()->json($data);
+        // return response()->json($data);
+
+        return view('hello.index', $data);
     }
 
     /**
      * @param $msg
      * @return void
      */
-    public function other($msg)
+    public function other(Request $request)
     {
         // $data = [
         //     'msg' => $request->bye,
@@ -96,9 +98,13 @@ class HelloController extends Controller
         // Storage::disk('local')->move('public/bk_' . $this->fname, 'bk_' . $this->fname);
 
         // ダウンロード
-        return Storage::disk('public')->download($this->fname);
+        // return Storage::disk('public')->download($this->fname);
 
+        # アプロード
+        Storage::disk('local')->putFile('files', $request->file('file'));
         return redirect()->route('hello');
+
+        // return redirect()->route('hello');
     }
 
     /**

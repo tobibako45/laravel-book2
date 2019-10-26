@@ -3,28 +3,23 @@
 
 namespace App\Http\Controllers;
 
-use http\Env\Response;
-use Illuminate\Http\Request;
-use App\MyClasses\MyService;
+// use App\MyClasses\MyService;
+use App\MyClasses\MyServiceInterface;
 
 class HelloController extends Controller
 {
-    // ここで1回インスタンスを生成
-    function __construct(MyService $myservice)
+    function __construct()
     {
-        // ここで2回目のインスタンスを生成
-        $myservice = app(MyService::class);
     }
 
-    // ここで3回目のインスタンスを生成
-    public function index(MyService $myservice, int $id = -1)
+    public function index(MyServiceInterface $myService, int $id = -1)
     {
 
-        $myservice->setId($id);
+        $myService->setId($id);
 
         $data = [
-            'msg'=> $myservice->say($id),
-            'data'=> $myservice->alldata()
+            'msg' => $myService->say(),
+            'data' => $myService->alldata()
         ];
 
         return response()->json($data);

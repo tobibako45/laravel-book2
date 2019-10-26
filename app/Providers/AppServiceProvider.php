@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\MyClasses\MyServiceInterface;
 use App\MyClasses\MyService;
+use App\MyClasses\PowerMyService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,10 +40,22 @@ class AppServiceProvider extends ServiceProvider
         //     return $myservice;
         // });
 
-
         // 引数を必要とする結合
-        app()->when('App\MyClasses\MyService')
-            ->needs('$id')
-            ->give(2);
+        // app()->when('App\MyClasses\MyService')
+        //     ->needs('$id')
+        //     ->give(2);
+
+        // 粗な結合
+        // 「このMyServiceInterfaceを結合する。具体的な実装は、このMyServiceを使う」って意味。
+        app()->bind(
+            MyServiceInterface::class,
+
+            // PowerMyServiceを使うためコメントアウト
+            // MyService::class
+
+            // PowerMyServiceに変更
+            PowerMyService::class
+        );
+
     }
 }

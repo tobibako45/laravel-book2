@@ -22,9 +22,9 @@ class HelloController extends Controller
             'data' => $myService->alldata()
         ];
 
-        return response()->json($data);
+        // return response()->json($data);
 
-        // return view('hello.index', $data);
+        return view('hello.index', $data);
     }
 
 }
